@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chant Spinner Verbs for Claude Code</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #fff;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .subtitle a {
+      color: #a78bfa;
+      text-decoration: none;
+    }
+
+    .subtitle a:hover { text-decoration: underline; }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin-bottom: 0.75rem;
+    }
+
+    .verbs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .verb-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 0.6rem;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+
+    .verb-item:hover { background: #222; border-color: #3a3a3a; }
+
+    .verb-item.selected {
+      background: #1e1a2e;
+      border-color: #6d4aff;
+    }
+
+    .verb-item input[type="checkbox"] {
+      accent-color: #6d4aff;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .verb-text {
+      font-size: 0.9rem;
+      color: #d0d0d0;
+    }
+
+    .verb-item.selected .verb-text { color: #e8e8e8; }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .control-group label {
+      font-size: 0.75rem;
+      color: #888;
+      font-weight: 500;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .btn {
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: #1a1a1a;
+      color: #aaa;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn:hover { background: #222; color: #ddd; border-color: #444; }
+
+    .btn.active {
+      background: #2a1f4a;
+      color: #c4b5fd;
+      border-color: #6d4aff;
+    }
+
+    .btn-select {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.7rem;
+      background: transparent;
+      border: 1px solid #333;
+      border-radius: 5px;
+      color: #777;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-select:hover { color: #aaa; border-color: #444; }
+
+    .output-block {
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.9rem;
+      background: #181818;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .output-header span {
+      font-size: 0.75rem;
+      color: #666;
+      font-family: monospace;
+    }
+
+    .copy-btn {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      background: #1e1a2e;
+      border: 1px solid #4a3aaa;
+      border-radius: 5px;
+      color: #a78bfa;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover { background: #2a1f4a; }
+    .copy-btn.copied { color: #6ee7b7; border-color: #059669; background: #0d2e22; }
+
+    pre {
+      padding: 1rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: #c8c8c8;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .instructions {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #131313;
+      border: 1px solid #222;
+      border-radius: 8px;
+    }
+
+    .instructions p {
+      font-size: 0.85rem;
+      color: #999;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+    }
+
+    .instructions p:last-child { margin-bottom: 0; }
+
+    .instructions code {
+      font-family: monospace;
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      padding: 0.15rem 0.35rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      color: #c4b5fd;
+    }
+
+    .path-tabs {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .path-tab {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .path-tab:hover { color: #999; }
+    .path-tab.active { color: #c4b5fd; border-color: #6d4aff; background: #1e1a2e; }
+
+    .count-badge {
+      font-size: 0.75rem;
+      color: #666;
+      margin-left: auto;
+    }
+
+    .select-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .notice {
+      font-size: 0.8rem;
+      color: #555;
+      padding: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Chant Spinner Verbs</h1>
+  <p class="subtitle">
+    Custom <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank">Claude Code</a>
+    spinner verbs for the sacred chant musician.
+  </p>
+
+  <!-- Step 1: Pick verbs -->
+  <section>
+    <h2>Step 1 — Choose Verbs</h2>
+    <div class="select-row">
+      <button class="btn-select" id="selectAll">Select all</button>
+      <button class="btn-select" id="selectNone">Select none</button>
+      <span class="count-badge" id="countBadge">21 / 21 selected</span>
+    </div>
+    <div class="verbs-list" id="verbsList"></div>
+  </section>
+
+  <!-- Step 2: Options -->
+  <section>
+    <h2>Step 2 — Options</h2>
+    <div class="controls">
+      <div class="control-group">
+        <label>Mode</label>
+        <div class="btn-group">
+          <button class="btn active" data-mode="replace" id="modeReplace">Replace defaults</button>
+          <button class="btn" data-mode="append" id="modeAppend">Append to defaults</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Target file</label>
+        <div class="btn-group">
+          <button class="btn active" data-target="vscode" id="targetVSCode">VSCode</button>
+          <button class="btn" data-target="settings" id="targetSettings">settings.json</button>
+          <button class="btn" data-target="local" id="targetLocal">settings.local.json</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 3: Output -->
+  <section>
+    <h2>Step 3 — Copy &amp; Paste</h2>
+    <div class="output-block">
+      <div class="output-header">
+        <span id="outputLabel"></span>
+        <button class="copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <pre id="outputPre"></pre>
+    </div>
+    <div class="instructions" id="instructions"></div>
+  </section>
+</div>
+
+<script>
+const VERBS = [
+  "Removing the flats from all the O Antiphons",
+  "Putting flats in all the O Antiphons",
+  "Reading the antiphon you were supposed to be singing",
+  "Singing the diamond notes too quickly",
+  "Singing the diamond notes too slowly",
+  "Singing the diamond notes at the right speed",
+  "Arguing with the ccwatershed guy about how to sing the diamond notes",
+  "Adding inappropriate ictus marks",
+  "Removing appropriate ictus marks",
+  "Adding a swing rhythm to 'Qui habitat'",
+  "Adding a swing rhythm to 'Requiem aeternam'",
+  "Adding a hiphop beat to 'In paradisum'",
+  "Replacing all the choir robes with pink",
+  "Sneaking into the Vatican and changing all the choir robes to pink",
+  "Sneaking into the Vatican and changing all the choir robes to pink while singing 'In paradisum' ",
+  "Sneaking 'Canada' into the O Antiphon sequence",
+  "Replacing all the choir robes with pantsuits",
+  "Sneaking pollen into the incense",
+  "Blocking both ends of the otherwise empty pew",
+  "Adding bunny ears to the artwork on the hymnals",
+  "Intoning a random Mass part you hadn't prepared"
+];
+
+const FILE_PATHS = {
+  vscode: {
+    win:   "%APPDATA%\\Code\\User\\settings.json",
+    mac:   "~/Library/Application Support/Code/User/settings.json",
+    linux: "~/.config/Code/User/settings.json",
+  },
+  settings: {
+    win: "%USERPROFILE%\\.claude\\settings.json",
+    mac: "~/.claude/settings.json",
+    linux: "~/.claude/settings.json",
+  },
+  local: {
+    win: "%USERPROFILE%\\.claude\\settings.local.json",
+    mac: "~/.claude/settings.local.json",
+    linux: "~/.claude/settings.local.json",
+  },
+};
+
+let selected = new Set(VERBS.map((_, i) => i));
+let mode = "replace";
+let target = "vscode";
+
+// Build verb list
+const verbsList = document.getElementById("verbsList");
+VERBS.forEach((verb, i) => {
+  const item = document.createElement("div");
+  item.className = "verb-item selected";
+  item.dataset.index = i;
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.checked = true;
+  const span = document.createElement("span");
+  span.className = "verb-text";
+  span.textContent = verb;
+  item.appendChild(cb);
+  item.appendChild(span);
+  item.addEventListener("click", () => toggleVerb(i, item, cb));
+  verbsList.appendChild(item);
+});
+
+function toggleVerb(i, item, cb) {
+  if (selected.has(i)) {
+    selected.delete(i);
+    item.classList.remove("selected");
+    cb.checked = false;
+  } else {
+    selected.add(i);
+    item.classList.add("selected");
+    cb.checked = true;
+  }
+  updateCount();
+  renderOutput();
+}
+
+document.getElementById("selectAll").addEventListener("click", () => {
+  VERBS.forEach((_, i) => selected.add(i));
+  verbsList.querySelectorAll(".verb-item").forEach(el => {
+    el.classList.add("selected");
+    el.querySelector("input").checked = true;
+  });
+  updateCount(); renderOutput();
+});
+
+document.getElementById("selectNone").addEventListener("click", () => {
+  selected.clear();
+  verbsList.querySelectorAll(".verb-item").forEach(el => {
+    el.classList.remove("selected");
+    el.querySelector("input").checked = false;
+  });
+  updateCount(); renderOutput();
+});
+
+function updateCount() {
+  document.getElementById("countBadge").textContent =
+    `${selected.size} / ${VERBS.length} selected`;
+}
+
+// Mode buttons
+document.querySelectorAll("[data-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll("[data-mode]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderOutput();
+  });
+});
+
+// Target buttons
+document.querySelectorAll("[data-target]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    target = btn.dataset.target;
+    document.querySelectorAll("[data-target]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderOutput();
+  });
+});
+
+function buildSnippet() {
+  const verbs = VERBS.filter((_, i) => selected.has(i));
+  const config = { mode, verbs };
+
+  if (target === "vscode") {
+    return JSON.stringify({ "claudeCode.spinnerVerbs": config }, null, 2);
+  } else {
+    return JSON.stringify({ "claudeCode.spinnerVerbs": config }, null, 2);
+  }
+}
+
+function renderOutput() {
+  const snippet = buildSnippet();
+  document.getElementById("outputPre").textContent = snippet;
+
+  const paths = FILE_PATHS[target];
+  document.getElementById("outputLabel").textContent =
+    target === "vscode" ? "settings.json (VSCode)" :
+    target === "settings" ? "~/.claude/settings.json" :
+    "~/.claude/settings.local.json";
+
+  // Instructions
+  const instr = document.getElementById("instructions");
+  const isVSCode = target === "vscode";
+
+  let html = "";
+  if (isVSCode) {
+    html = `
+      <p>Open VSCode settings with <code>Ctrl+Shift+P</code> → <em>Preferences: Open User Settings (JSON)</em>.</p>
+      <p>Paste the JSON inside the top-level <code>{}</code> object. If a <code>claudeCode.spinnerVerbs</code> key already exists, replace it.</p>
+      <p>File locations by OS:</p>
+      <p>Windows: <code>${paths.win}</code></p>
+      <p>macOS: <code>${paths.mac}</code></p>
+      <p>Linux: <code>${paths.linux}</code></p>
+    `;
+  } else {
+    const label = target === "settings" ? "settings.json" : "settings.local.json";
+    html = `
+      <p>Open or create <code>${paths.win}</code> (Windows) / <code>${paths.mac}</code> (macOS/Linux).</p>
+      <p>Paste the JSON inside the top-level <code>{}</code> object. If a <code>claudeCode.spinnerVerbs</code> key already exists, replace it.</p>
+      <p><strong>settings.json</strong> is synced across machines (e.g. via dotfiles).
+         <strong>settings.local.json</strong> is machine-local and not synced.</p>
+    `;
+  }
+
+  const modeNote = mode === "append"
+    ? `<p>Mode <strong>append</strong>: your verbs will be added to Claude Code's built-in defaults.</p>`
+    : `<p>Mode <strong>replace</strong>: only the verbs above will appear — Claude's defaults are hidden.</p>`;
+
+  instr.innerHTML = html + modeNote;
+}
+
+// Copy button
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const text = document.getElementById("outputPre").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("copyBtn");
+    btn.textContent = "Copied!";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2000);
+  });
+});
+
+// Init
+renderOutput();
+</script>
+</body>
+</html>
