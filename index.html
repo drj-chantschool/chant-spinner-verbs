@@ -12,10 +12,7 @@
       background: #0f0f0f;
       color: #e8e8e8;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
     }
 
     .container { max-width: 580px; width: 100%; }
@@ -82,35 +79,23 @@
     .copy-btn.done { background: #0d2e22; color: #6ee7b7; }
 
     /* verb list */
-    details { margin-top: 0; }
-    summary {
-      font-size: 0.75rem;
+    .verbs-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       color: #444;
-      cursor: pointer;
-      user-select: none;
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      margin-bottom: 0.5rem;
     }
-    summary::-webkit-details-marker { display: none; }
-    summary::before {
-      content: "▸";
-      font-size: 0.65rem;
-      transition: transform 0.15s;
-      display: inline-block;
-    }
-    details[open] summary::before { transform: rotate(90deg); }
-    summary:hover { color: #777; }
 
     .verbs-list {
       display: flex;
       flex-direction: column;
       gap: 0.22rem;
-      margin-top: 0.6rem;
     }
 
-    .verb { font-size: 0.82rem; color: #444; padding: 0.15rem 0; }
+    .verb { font-size: 0.85rem; color: #555; padding: 0.2rem 0; border-bottom: 1px solid #181818; }
+    .verb:last-child { border-bottom: none; }
   </style>
 </head>
 <body>
@@ -137,10 +122,8 @@
     <button class="copy-btn" id="copyBtn">Copy</button>
   </div>
 
-  <details>
-    <summary>21 verbs included</summary>
-    <div class="verbs-list" id="verbsList"></div>
-  </details>
+  <div class="verbs-label" style="margin-top:2rem;">21 verbs</div>
+  <div class="verbs-list" id="verbsList"></div>
 </div>
 
 <script>
