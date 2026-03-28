@@ -12,129 +12,105 @@
       background: #0f0f0f;
       color: #e8e8e8;
       min-height: 100vh;
-      padding: 2.5rem 1rem;
-    }
-
-    .container { max-width: 600px; margin: 0 auto; }
-
-    h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 0.3rem;
-    }
-
-    .sub {
-      font-size: 0.88rem;
-      color: #555;
-      margin-bottom: 2.5rem;
-    }
-
-    /* ── Verb list ── */
-    .verbs-header {
-      display: flex;
-      align-items: baseline;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .verbs-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #555;
-    }
-
-    .count { font-size: 0.78rem; color: #444; }
-
-    .tiny-btn {
-      font-size: 0.72rem;
-      padding: 0.15rem 0.5rem;
-      background: transparent;
-      border: 1px solid #2a2a2a;
-      border-radius: 4px;
-      color: #555;
-      cursor: pointer;
-      transition: color 0.1s, border-color 0.1s;
-    }
-    .tiny-btn:hover { color: #999; border-color: #444; }
-
-    .verbs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      margin-bottom: 2rem;
-    }
-
-    .verb-item {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      padding: 0.38rem 0.55rem;
-      background: #161616;
-      border: 1px solid #222;
-      border-radius: 5px;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.1s, border-color 0.1s;
-    }
-    .verb-item:hover { background: #1c1c1c; }
-    .verb-item.on { background: #1a1730; border-color: #5b3fd4; }
-
-    .verb-item input[type="checkbox"] {
-      accent-color: #6d4aff;
-      width: 13px; height: 13px;
-      flex-shrink: 0;
-      cursor: pointer;
-      pointer-events: none;
+      justify-content: center;
+      padding: 2rem 1rem;
     }
 
-    .verb-text { font-size: 0.87rem; color: #bbb; }
-    .verb-item.on .verb-text { color: #ddd; }
+    .container { max-width: 580px; width: 100%; }
 
-    /* ── Mode toggle ── */
-    .mode-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
+    h1 { font-size: 1.4rem; font-weight: 600; color: #fff; margin-bottom: 0.3rem; }
+    .sub { font-size: 0.85rem; color: #555; margin-bottom: 2.5rem; }
 
-    .mode-label { font-size: 0.78rem; color: #555; }
+    /* options */
+    .opts { display: flex; gap: 1.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
 
-    .mode-btn {
-      font-size: 0.78rem;
-      padding: 0.28rem 0.75rem;
+    .opt-group { display: flex; align-items: center; gap: 0.4rem; }
+    .opt-label { font-size: 0.75rem; color: #555; }
+
+    .pill {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
       background: #161616;
       border: 1px solid #2a2a2a;
-      border-radius: 5px;
+      border-radius: 20px;
       color: #666;
       cursor: pointer;
       transition: all 0.1s;
     }
-    .mode-btn:hover { color: #aaa; border-color: #3a3a3a; }
-    .mode-btn.on { background: #1a1730; border-color: #5b3fd4; color: #b09ef5; }
+    .pill:hover { color: #aaa; border-color: #3a3a3a; }
+    .pill.on { background: #1a1730; border-color: #5b3fd4; color: #c4b5fd; }
 
-    /* ── Action buttons ── */
-    .actions { display: flex; gap: 0.65rem; flex-wrap: wrap; }
-
-    .action-btn {
-      flex: 1;
-      min-width: 130px;
-      padding: 0.7rem 1rem;
-      background: #1a1730;
-      border: 1px solid #5b3fd4;
+    /* command box */
+    .cmd-wrap {
+      display: flex;
+      align-items: stretch;
+      background: #111;
+      border: 1px solid #2a2a2a;
       border-radius: 8px;
-      color: #c4b5fd;
-      font-size: 0.88rem;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .cmd {
+      flex: 1;
+      padding: 0.9rem 1rem;
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: #c8c8c8;
+      background: transparent;
+      border: none;
+      outline: none;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+
+    .copy-btn {
+      padding: 0 1.1rem;
+      background: #1a1730;
+      border: none;
+      border-left: 1px solid #2a2a2a;
+      color: #a78bfa;
+      font-size: 0.82rem;
       font-weight: 500;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.15s;
-      text-align: center;
     }
-    .action-btn:hover { background: #231e40; border-color: #7c5ff0; color: #ddd3ff; }
-    .action-btn.done { background: #0d2e22; border-color: #059669; color: #6ee7b7; }
+    .copy-btn:hover { background: #231e40; color: #ddd3ff; }
+    .copy-btn.done { background: #0d2e22; color: #6ee7b7; }
+
+    /* verb list */
+    details { margin-top: 0; }
+    summary {
+      font-size: 0.75rem;
+      color: #444;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: "▸";
+      font-size: 0.65rem;
+      transition: transform 0.15s;
+      display: inline-block;
+    }
+    details[open] summary::before { transform: rotate(90deg); }
+    summary:hover { color: #777; }
+
+    .verbs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.22rem;
+      margin-top: 0.6rem;
+    }
+
+    .verb { font-size: 0.82rem; color: #444; padding: 0.15rem 0; }
   </style>
 </head>
 <body>
@@ -142,29 +118,34 @@
   <h1>Chant Spinner Verbs</h1>
   <p class="sub">Custom Claude Code spinner verbs for the sacred chant musician.</p>
 
-  <div class="verbs-header">
-    <span class="verbs-label">Verbs</span>
-    <span class="count" id="count"></span>
-    <button class="tiny-btn" id="selAll">all</button>
-    <button class="tiny-btn" id="selNone">none</button>
+  <div class="opts">
+    <div class="opt-group">
+      <span class="opt-label">Target:</span>
+      <button class="pill on" data-target="">VSCode</button>
+      <button class="pill" data-target="--target settings">settings.json</button>
+      <button class="pill" data-target="--target local">settings.local.json</button>
+    </div>
+    <div class="opt-group">
+      <span class="opt-label">Mode:</span>
+      <button class="pill on" data-mode="">Replace defaults</button>
+      <button class="pill" data-mode="--mode append">Append to defaults</button>
+    </div>
   </div>
 
-  <div class="verbs-list" id="verbsList"></div>
-
-  <div class="mode-row">
-    <span class="mode-label">Mode:</span>
-    <button class="mode-btn on" id="modeReplace" data-mode="replace">Replace defaults</button>
-    <button class="mode-btn" id="modeAppend" data-mode="append">Append to defaults</button>
+  <div class="cmd-wrap">
+    <div class="cmd" id="cmd"></div>
+    <button class="copy-btn" id="copyBtn">Copy</button>
   </div>
 
-  <div class="actions">
-    <button class="action-btn" id="btnVSCode">Copy for VSCode</button>
-    <button class="action-btn" id="btnSettings">Copy for settings.json</button>
-    <button class="action-btn" id="btnLocal">Copy for settings.local.json</button>
-  </div>
+  <details>
+    <summary>21 verbs included</summary>
+    <div class="verbs-list" id="verbsList"></div>
+  </details>
 </div>
 
 <script>
+const BASE = "curl -sL https://raw.githubusercontent.com/drj-chantschool/chant-spinner-verbs/master/install.py | python3";
+
 const VERBS = [
   "Removing the flats from all the O Antiphons",
   "Putting flats in all the O Antiphons",
@@ -189,72 +170,52 @@ const VERBS = [
   "Intoning a random Mass part you hadn't prepared"
 ];
 
-let selected = new Set(VERBS.map((_, i) => i));
-let mode = "replace";
-
-// Build list
-const list = document.getElementById("verbsList");
-VERBS.forEach((verb, i) => {
-  const item = document.createElement("div");
-  item.className = "verb-item on";
-  const cb = document.createElement("input");
-  cb.type = "checkbox"; cb.checked = true;
-  const span = document.createElement("span");
-  span.className = "verb-text";
-  span.textContent = verb;
-  item.append(cb, span);
-  item.addEventListener("click", () => {
-    if (selected.has(i)) { selected.delete(i); item.classList.remove("on"); cb.checked = false; }
-    else                  { selected.add(i);    item.classList.add("on");    cb.checked = true;  }
-    updateCount();
-  });
-  list.appendChild(item);
+// Populate verb list
+const verbsList = document.getElementById("verbsList");
+VERBS.forEach(v => {
+  const d = document.createElement("div");
+  d.className = "verb";
+  d.textContent = v;
+  verbsList.appendChild(d);
 });
 
-function updateCount() {
-  document.getElementById("count").textContent = `${selected.size} / ${VERBS.length}`;
+let targetArg = "";
+let modeArg = "";
+
+function updateCmd() {
+  const args = [targetArg, modeArg].filter(Boolean).join(" ");
+  const cmd = args ? `${BASE} - ${args}` : BASE;
+  document.getElementById("cmd").textContent = cmd;
 }
-updateCount();
+updateCmd();
 
-document.getElementById("selAll").addEventListener("click", () => {
-  VERBS.forEach((_, i) => selected.add(i));
-  list.querySelectorAll(".verb-item").forEach(el => { el.classList.add("on"); el.querySelector("input").checked = true; });
-  updateCount();
-});
-document.getElementById("selNone").addEventListener("click", () => {
-  selected.clear();
-  list.querySelectorAll(".verb-item").forEach(el => { el.classList.remove("on"); el.querySelector("input").checked = false; });
-  updateCount();
+document.querySelectorAll("[data-target]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    targetArg = btn.dataset.target;
+    document.querySelectorAll("[data-target]").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    updateCmd();
+  });
 });
 
-// Mode
 document.querySelectorAll("[data-mode]").forEach(btn => {
   btn.addEventListener("click", () => {
-    mode = btn.dataset.mode;
+    modeArg = btn.dataset.mode;
     document.querySelectorAll("[data-mode]").forEach(b => b.classList.remove("on"));
     btn.classList.add("on");
+    updateCmd();
   });
 });
 
-function buildJSON() {
-  const verbs = VERBS.filter((_, i) => selected.has(i));
-  return JSON.stringify({ "claudeCode.spinnerVerbs": { mode, verbs } }, null, 2);
-}
-
-function flash(btn, label) {
-  const orig = btn.textContent;
-  btn.textContent = "Copied!";
-  btn.classList.add("done");
-  setTimeout(() => { btn.textContent = orig; btn.classList.remove("done"); }, 1800);
-}
-
-function copyFor(btn) {
-  navigator.clipboard.writeText(buildJSON()).then(() => flash(btn));
-}
-
-document.getElementById("btnVSCode").addEventListener("click",    e => copyFor(e.currentTarget));
-document.getElementById("btnSettings").addEventListener("click",  e => copyFor(e.currentTarget));
-document.getElementById("btnLocal").addEventListener("click",     e => copyFor(e.currentTarget));
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const text = document.getElementById("cmd").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("copyBtn");
+    btn.textContent = "Copied!";
+    btn.classList.add("done");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1800);
+  });
+});
 </script>
 </body>
 </html>
