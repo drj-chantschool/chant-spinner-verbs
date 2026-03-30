@@ -5,31 +5,15 @@ import argparse
 import json
 import os
 import sys
+import urllib.request
 from pathlib import Path
 
-VERBS = [
-    "Removing the flats from all the O Antiphons",
-    "Putting flats in all the O Antiphons",
-    "Reading the antiphon you were supposed to be singing",
-    "Singing the diamond notes too quickly",
-    "Singing the diamond notes too slowly",
-    "Singing the diamond notes at the right speed",
-    "Arguing with the ccwatershed guy about how to sing the diamond notes",
-    "Adding inappropriate ictus marks",
-    "Removing appropriate ictus marks",
-    "Adding a swing rhythm to 'Qui habitat'",
-    "Adding a swing rhythm to 'Requiem aeternam'",
-    "Adding a hiphop beat to 'In paradisum'",
-    "Replacing all the choir robes with pink",
-    "Sneaking into the Vatican and changing all the choir robes to pink",
-    "Sneaking into the Vatican and changing all the choir robes to pink while singing 'In paradisum'",
-    "Sneaking 'Canada' into the O Antiphon sequence",
-    "Replacing all the choir robes with pantsuits",
-    "Sneaking pollen into the incense",
-    "Blocking both ends of the otherwise empty pew",
-    "Adding bunny ears to the artwork on the hymnals",
-    "Intoning a random Mass part you hadn't prepared",
-]
+VERBS_URL = "https://raw.githubusercontent.com/drj-chantschool/chant-spinner-verbs/master/verbs.json"
+
+
+def fetch_verbs() -> list[str]:
+    with urllib.request.urlopen(VERBS_URL) as r:
+        return json.loads(r.read())
 
 
 def vscode_path() -> Path:
@@ -46,9 +30,9 @@ def claude_path(local: bool = False) -> Path:
 
 
 TARGETS = {
-    "vscode":    vscode_path,
-    "settings":  lambda: claude_path(local=False),
-    "local":     lambda: claude_path(local=True),
+    "vscode":   vscode_path,
+    "settings": lambda: claude_path(local=False),
+    "local":    lambda: claude_path(local=True),
 }
 
 
@@ -64,6 +48,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    verbs = fetch_verbs()
     path = TARGETS[args.target]()
 
     if path.exists():
@@ -76,9 +61,9 @@ def main() -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         data = {}
 
-    data["claudeCode.spinnerVerbs"] = {"mode": args.mode, "verbs": VERBS}
+    data["claudeCode.spinnerVerbs"] = {"mode": args.mode, "verbs": verbs}
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Done — wrote {len(VERBS)} verbs to {path}")
+    print(f"Done — wrote {len(verbs)} verbs to {path}")
 
 
 if __name__ == "__main__":
